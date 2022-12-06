@@ -13,4 +13,4 @@ app.use('/api/v1',authRouter);
 //acceder todas las variables en el archivo .env CUANDO DESPLEGUEMOS ES NECESARIO PARA QUE LA PLATAFORMA
 //LE ASIGNE UN PUERTO POR ESO NO SE CONFIGURA EN EL .ENV
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log('🔥🔥🔥 im working'));
+app.listen(PORT, () => console.log('🔥🔥🔥 http://localhost:' + PORT));
