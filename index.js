@@ -9,6 +9,9 @@ app.use(express.urlencoded({extended:false}));
 //rutas
 app.use('/api/v1/auth',authRouter);
 
+//just to practice and test
+app.use(express.static('public'))
+
 
 //acceder todas las variables en el archivo .env CUANDO DESPLEGUEMOS ES NECESARIO PARA QUE LA PLATAFORMA
 //LE ASIGNE UN PUERTO POR ESO NO SE CONFIGURA EN EL .ENV

@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function(next){
     const user = this;
-    
     if(!user.isModified('password')) return next()
 
     try {
@@ -30,5 +29,9 @@ userSchema.pre("save", async function(next){
         console.log(error)
         throw new Error('Hash password failure')
     }
-})
+});
+userSchema.methods.comparePassword = async function(clientPassword) {
+    return await bcryptjs.compare(clientPassword, this.password)
+};
+
 export const User = mongoose.model('User', userSchema)
