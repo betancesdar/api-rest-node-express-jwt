@@ -1,6 +1,6 @@
 import { User } from "../models/User.js"
 import jwt from "jsonwebtoken"
-import { generateToken } from "../utils/tokenManager.js";
+import { generateRefreshToken, generateToken } from "../utils/tokenManager.js";
 
 export const register = async (req,res)=> {
     const {email,password} = req.body
@@ -39,7 +39,7 @@ export const login = async (req,res)=> {
 
         //Generate token jwt 
         const {token, expiresIn} = generateToken(user.id)
-
+        generateRefreshToken(user.id, res)
         return res.json({token, expiresIn});
     } catch(error) {
         console.log(error)
@@ -57,4 +57,34 @@ export const infoUser = async (req,res) => {
 
     }
     
+}
+
+export const refreshToken = (req,res) => {
+    try {
+        const refreshTokenCookie = req.cookies.refreshToken
+        if(!refreshTokenCookie) throw new Error("No token found")
+
+        const { uid } = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH);
+        const {token, expiresIn} = generateToken(uid)
+
+        return res.json({token, expiresIn}); 
+
+    } catch (error) {
+        console.log(error)
+        const TokenVerificationErrors = {
+            ["invalid signature"]: "The signature of the JWT it is not valid",
+            ["jwt expired"]: "Json Web Token Expired",
+            ["invalid token"]: "Token not valid",
+            ["No Bearer"]: "Please use the Bearer Format!",
+            ["jwt malformed"]: "JWT it is malformed"
+        }
+        return res
+        .status(401)
+        .send({error: TokenVerificationErrors[error.message]})
+    }
+}
+
+export const logout = (req,res) => {
+    res.clearCookie("refreshToken")
+    res.json({ok:true})
 }

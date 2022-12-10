@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProtectedPage</title>
+</head>
+<body>
+    <h1>Route protected</h1>
+    <h3>Email: </h3> 
+    <div>
+        <p id="respon">email@sample.com</p>
+        <button id="logout">Log Out</button>
+    </div>
+
+    <script>
+
+        const logout = document.getElementById("logout")
+        logout.addEventListener('click', async ()=>{
+            const res = await fetch('/api/v1/auth/logout', {
+                method: 'GET',
+            });
+            console.log(res)
+        });
+       
+        
+        document.addEventListener('DOMContentLoaded', async (e) =>{
+            //sending the token to get a protected router
+            try {
+
+                const resToken = await fetch('/api/v1/auth/refresh',{
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                const {token} = await resToken.json()
+
+                //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MzkwOTM4YWY5NTJkODI2MGY4NGYzMGMiLCJpYXQiOjE2NzA2NDc0NDksImV4cCI6MTY3MDY0ODM0OX0.Tzbu5-Yhusp-MNno739J-qQTcvecUtIEgRbLygHbhts'
+                const res = await fetch('/api/v1/auth/protected',{
+                    method: 'GET',
+                    headers: {
+                       'Authorization': `Bearer ${token}`,
+                       'Content-Type': 'application/json' 
+                    },
+                    credentials: 'include'
+                })
+                console.log(res.ok, res.status)
+                const data = await res.json()
+
+                if(res.ok){
+                    const respon = document.getElementById("respon")
+                    respon.textContent = data.email
+                }
+                
+
+            } catch (error) {
+                console.log(error)
+            }
+        })
+    </script>
+</body>
+</html>

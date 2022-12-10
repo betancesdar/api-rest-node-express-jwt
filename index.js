@@ -2,9 +2,12 @@ import 'dotenv/config'
 import './Config/connectdb.js'
 import express from 'express'
 import authRouter from './routes/auth.route.js'
+import cookie from 'cookie-parser'
+
 const app = express();
 //Middlewares
 app.use(express.json());
+app.use(cookie());
 app.use(express.urlencoded({extended:false}));
 //rutas
 app.use('/api/v1/auth',authRouter);

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+
 export const requireAuth = (req,res,next) => {
     try {   
         let token = req.headers?.authorization;
@@ -17,7 +18,8 @@ export const requireAuth = (req,res,next) => {
             ["invalid signature"]: "The signature of the JWT it is not valid",
             ["jwt expired"]: "Json Web Token Expired",
             ["invalid token"]: "Token not valid",
-            ["No Bearer"]: "Please use the Bearer Format!"
+            ["No Bearer"]: "Please use the Bearer Format!",
+            ["jwt malformed"]: "JWT it is malformed"
         }
         return res
         .status(401)
