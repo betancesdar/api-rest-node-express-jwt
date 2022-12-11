@@ -1,8 +1,9 @@
 import 'dotenv/config'
 import './Config/connectdb.js'
-import express from 'express'
+import express, { application } from 'express'
 import authRouter from './routes/auth.route.js'
 import cookie from 'cookie-parser'
+import linkRouter from './routes/link.route.js'
 
 const app = express();
 //Middlewares
@@ -11,7 +12,7 @@ app.use(cookie());
 app.use(express.urlencoded({extended:false}));
 //rutas
 app.use('/api/v1/auth',authRouter);
-
+app.use('/api/v1/links', linkRouter);
 //just to practice and test
 app.use(express.static('public'))
 

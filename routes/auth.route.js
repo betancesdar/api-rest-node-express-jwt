@@ -3,19 +3,15 @@ import {infoUser, login, register, refreshToken, logout} from '../controllers/au
 import {body} from 'express-validator'
 import { validationResultExpress } from "../middlewares/validationResultExpress.js";
 import { requireAuth } from "../middlewares/requireAuth.js";
+import { bodyLoginValidator, bodyRegisterValidator } from "../middlewares/validatorManager.js";
 const router = Router()
 
-router.post('/register',[
-    body('email','Email format it is incorrect').trim().isEmail().normalizeEmail(),
-    body('password', 'Password min 6 characters').trim().isLength({min:6})
-],
-validationResultExpress,
+router.post('/register',
+bodyRegisterValidator,
 register
 );
-router.post('/login',[
-    body('email','Email format it is incorrect').trim().isEmail().normalizeEmail(),
-    body('password', 'Password min 6 characters').trim().isLength({min:6})
-],validationResultExpress, 
+router.post('/login',
+bodyLoginValidator,
 login
 );
 //no funciona

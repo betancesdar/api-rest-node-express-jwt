@@ -26,3 +26,11 @@ export const generateRefreshToken = (uid,res) => {
         console.log(error)        
     }
 }
+
+export const tokenVerificationErrors = {
+    ["invalid signature"]: "The signature of the JWT it is not valid",
+    ["jwt expired"]: "Json Web Token Expired",
+    ["invalid token"]: "Token not valid",
+    ["No Bearer"]: "Please use the Bearer Format!",
+    ["jwt malformed"]: "JWT it is malformed"
+}
