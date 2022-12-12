@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createLinks, getLinks, getLink, removeLink } from "../controllers/link.controller.js";
+import { createLinks, getLinks, getLink, removeLink, updateLink } from "../controllers/link.controller.js";
 import { requireAuth } from "../middlewares/requireAuth.js";
 import { bodyLinkValidator, paramsLinkValidator } from "../middlewares/validatorManager.js";
 
@@ -14,8 +14,9 @@ const router = Router()
 
 //test route
 router.get('/', requireAuth, getLinks)
-router.get('/:id',requireAuth,paramsLinkValidator, getLink)
+router.get('/:nanoLink', getLink)
 router.post('/',requireAuth,bodyLinkValidator, createLinks)
 router.delete('/:id',requireAuth,paramsLinkValidator, removeLink)
+router.patch('/:id',requireAuth,paramsLinkValidator,bodyLinkValidator, updateLink)
 
 export default router;

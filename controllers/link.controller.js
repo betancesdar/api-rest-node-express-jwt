@@ -17,6 +17,24 @@ export const getLinks = async (req,res) => {
 
 export const getLink = async (req,res) => {
     try {
+        const { nanoLink } = req.params
+        const link = await Link.findOne(nanoLink)
+        
+        if(!link) return res.status(404).json({error: 'Link does not exist'})
+
+        return res.json({nanoLink: link.originLink})
+    } catch (error) {
+        console.log(error)
+        if(error.kind === "objectId"){
+            return res.status(403).json({error: "Format id it is incorrect"})
+        }
+        return res.status(500).json({error: "Internal server error"})
+    }
+}
+
+//para un crud tradicional
+/*export const getLink = async (req,res) => {
+    try {
         const {id} = req.params
         const link = await Link.findById(id)
         if(!link) return res.status(404).json({error: 'Link does not exist'})
@@ -30,7 +48,7 @@ export const getLink = async (req,res) => {
         }
         return res.status(500).json({error: "Internal server error"})
     }
-}
+}*/
 
 export const createLinks = async(req,res) => {
     try {
@@ -58,6 +76,37 @@ export const removeLink = async (req,res) => {
         if(!link.uid.equals(req.uid)) return res.status(401).json({error: 'Restricted Link '})
 
         await link.remove()
+
+        return res.json({link})
+    } catch (error) {
+        console.log(error)
+        if(error.kind === "objectId"){
+            return res.status(403).json({error: "Format id it is incorrect"})
+        }
+        return res.status(500).json({error: "Internal server error"})
+    }
+}
+
+export const updateLink = async(req,res) => {
+    try {
+        const {id} = req.params
+        const {originLink} = req.body
+
+        console.log(originLink)
+
+        if(!originLink.startsWith("https://")){
+            originLink = "https://" + originLink
+        }
+
+        const link = await Link.findById(id)
+
+        if(!link) return res.status(404).json({error: 'Link does not exist'})
+
+        if(!link.uid.equals(req.uid)) return res.status(401).json({error: 'Restricted Link '})
+
+        //Update logic
+        link.originLink = originLink
+        await link.save()
         
         return res.json({link})
     } catch (error) {
