@@ -11,9 +11,10 @@ export const register = async (req,res)=> {
         user = new User({email,password});
         await user.save();
 
-        //jwt token
-
-        return res.status(201).json({message:"Created"})
+        //generate jwt token
+        const {token, expiresIn} = generateToken(user.id)
+        generateRefreshToken(user.id, res)
+        return res.status(201).json({token, expiresIn})
     } catch (error) {
      console.log(error);
      if(error.code === 11000){
