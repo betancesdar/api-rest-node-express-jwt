@@ -14,13 +14,16 @@ const whiteList = [process.env.ORIGIN1,process.env.ORIGIN2];
 
 app.use(cors({
     origin: function(origin,callback){
+        console.log("😯😯😯 => " , origin)
        if(!origin || whiteList.includes(origin)) {
         return this.callback(null, origin)
        }
 
-       return callback("Cors Errors origin: " + origin + "No authorized");
-    }
-}));
+       return callback("Cors Errors origin: " + origin + " No authorized");
+    },
+    credentials: true,
+    })
+);
 //Middlewares
 app.use(express.json());
 app.use(cookie());
